@@ -1,0 +1,9 @@
+{
+  "versionName": "0.0.0-template",
+  "versionCode": 0,
+  "apkUrl": "https://github.com/CPaxman/gleus-releases/releases/latest/download/gleus-release.apk",
+  "notes": "Template manifest — replaced by scripts/publish-release.sh on the first real signed release. versionCode 0 means 'no live release yet'; the app treats it as older than any installed build, so it never offers a downgrade to this placeholder.",
+  "publishedAt": "2026-06-12",
+  "mandatory": false,
+  "minSupportedVersionCode": 1
+}

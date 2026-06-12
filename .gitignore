@@ -1,0 +1,12 @@
+# APKs are published as GitHub Release assets, NEVER committed to the tree.
+# Committing 145 MB binaries would bloat git history permanently; release
+# assets live outside the git pack. See README.md and gleus-docs ADR 013.
+*.apk
+*.aab
+
+# Local APK staging area — drop a freshly built APK here, then publish it
+# as a release asset via scripts/publish-release.sh.
+staging/
+
+# OS noise
+.DS_Store
