@@ -1,9 +1,9 @@
 {
   "versionName": "0.2.0-beta.1",
-  "versionCode": 3,
+  "versionCode": 4,
   "apkUrl": "https://github.com/CPaxman/gleus-releases/releases/latest/download/gleus-release.apk",
-  "sha256": "e657c0d38ace2d1909ea8385584c7de129de55bc0c958479ce45fd7dcb61fc31",
-  "notes": "v3 — adds the in-app self-update checker (this is the bootstrap build: install once manually, future updates arrive automatically). Also FFT-autocorrelation MPM (#27). Same release key as v2, so installing over a signed v2 needs no uninstall.",
+  "sha256": "c5e3b7c7377673b2a64840f4cd915c7a99815f772015b94489ec0fb07677826e",
+  "notes": "v4 — 8192-sample drone analysis window for better bass accuracy under poor SNR (#8). First build delivered via self-update: v3 phones should see the update banner and pull this automatically.",
   "publishedAt": "2026-06-13",
   "mandatory": false,
   "minSupportedVersionCode": 1
