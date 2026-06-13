@@ -36,17 +36,31 @@ command -v node >/dev/null 2>&1 || fail "node not found (needed to read app.json
 VERSION_NAME="$(node -e "process.stdout.write(String(require('$APP_JSON').expo.version))")"
 VERSION_CODE="$(node -e "process.stdout.write(String(require('$APP_JSON').expo.android.versionCode))")"
 [ -n "$VERSION_NAME" ] || fail "could not read expo.version from app.json"
-[ -n "$VERSION_CODE" ] || fail "could not read expo.android.versionCode from app.json"
+# String(undefined) is the literal "undefined", which is truthy — reject it
+# explicitly so a missing versionCode fails loudly instead of writing invalid
+# JSON ("versionCode": undefined) into the manifest.
+case "$VERSION_CODE" in
+  ''|undefined|null) fail "expo.android.versionCode is missing/invalid in app.json (got '$VERSION_CODE'). Set an integer versionCode and bump it every native release." ;;
+esac
 
 # SHA-256 for post-download integrity verification by the app.
 SHA256="$(shasum -a 256 "$APK" | awk '{print $1}')"
 TAG="v$VERSION_NAME"
 TODAY="$(date +%F)"
 
-# Refuse to publish a debug-key-signed APK — it can't self-update.
-SIGNER="$(keytool -printcert -jarfile "$APK" 2>/dev/null | grep -i 'Owner:' | head -1 || true)"
-if echo "$SIGNER" | grep -qi 'androiddebugkey'; then
-  fail "APK is debug-key signed ($SIGNER). Self-update needs the stable release key (#28). Aborting."
+# Refuse to publish a debug-key-signed APK — it can't self-update. Use
+# apksigner, not `keytool -jarfile`: modern release APKs are signed with the
+# v2/v3 APK Signature Scheme, which keytool (v1/JAR only) cannot see, so it
+# would report nothing and silently pass a debug-signed APK through.
+APKSIGNER="$(ls -t "$HOME"/Library/Android/sdk/build-tools/*/apksigner 2>/dev/null | head -1 || true)"
+if [ -n "$APKSIGNER" ]; then
+  CERTS="$("$APKSIGNER" verify --print-certs "$APK" 2>/dev/null || true)"
+  if echo "$CERTS" | grep -qi 'androiddebugkey'; then
+    fail "APK is debug-key signed. Self-update needs the stable release key (#28). Aborting."
+  fi
+  [ -n "$CERTS" ] || echo "warning: apksigner returned no certs — could not confirm signing; proceeding." >&2
+else
+  echo "warning: apksigner not found — skipping debug-key check. Confirm the APK is release-signed before relying on self-update." >&2
 fi
 
 # Write the manifest the app consumes.
