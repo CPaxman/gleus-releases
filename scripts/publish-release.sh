@@ -45,7 +45,10 @@ esac
 
 # SHA-256 for post-download integrity verification by the app.
 SHA256="$(shasum -a 256 "$APK" | awk '{print $1}')"
-TAG="v$VERSION_NAME"
+# Tag by versionCode, not just versionName: beta versionNames repeat across
+# builds (versionCode is the real uniqueness key the app compares), so tagging
+# on versionName alone collides. e.g. v0.2.0-beta.1-vc3.
+TAG="v${VERSION_NAME}-vc${VERSION_CODE}"
 TODAY="$(date +%F)"
 
 # Refuse to publish a debug-key-signed APK — it can't self-update. Use

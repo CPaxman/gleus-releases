@@ -1,9 +1,9 @@
 {
   "versionName": "0.2.0-beta.1",
-  "versionCode": 2,
+  "versionCode": 3,
   "apkUrl": "https://github.com/CPaxman/gleus-releases/releases/latest/download/gleus-release.apk",
-  "sha256": "24f9db7263d72eba7ac49d678804f06cd7f70789d558d37bb7b802add0a5e25f",
-  "notes": "FFT-autocorrelation MPM (Android perf #27) + 8192 drone window (#8). First release-signed build — installs over a prior debug build require uninstall first.",
+  "sha256": "e657c0d38ace2d1909ea8385584c7de129de55bc0c958479ce45fd7dcb61fc31",
+  "notes": "v3 — adds the in-app self-update checker (this is the bootstrap build: install once manually, future updates arrive automatically). Also FFT-autocorrelation MPM (#27). Same release key as v2, so installing over a signed v2 needs no uninstall.",
   "publishedAt": "2026-06-13",
   "mandatory": false,
   "minSupportedVersionCode": 1
